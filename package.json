@@ -1,5 +1,5 @@
 {
-  "name": "@gongrzhe/server-gmail-autoauth-mcp",
+  "name": "@keleshteri/server-gmail-autoauth-mcp",
   "version": "1.1.11",
   "description": "Gmail MCP server with auto authentication support",
   "type": "module",
@@ -29,16 +29,16 @@
     "claude",
     "auto-auth"
   ],
-  "author": "gongrzhe",
+  "author": "keleshteri",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gongrzhe/server-gmail-autoauth-mcp.git"
+    "url": "git+https://github.com/keleshteri/server-gmail-autoauth-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/gongrzhe/server-gmail-autoauth-mcp/issues"
+    "url": "https://github.com/keleshteri/server-gmail-autoauth-mcp/issues"
   },
-  "homepage": "https://github.com/gongrzhe/server-gmail-autoauth-mcp#readme",
+  "homepage": "https://github.com/keleshteri/server-gmail-autoauth-mcp#readme",
   "publishConfig": {
     "access": "public"
   },
