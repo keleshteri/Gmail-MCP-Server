@@ -8,6 +8,7 @@ A Model Context Protocol (MCP) server for Gmail integration in Claude Desktop wi
 
 ## Features
 
+- **Multi-account support** - Manage multiple Gmail accounts (personal, work, etc.) with easy switching
 - Send emails with subject, content, **attachments**, and recipients
 - **Full attachment support** - send and receive file attachments
 - **Download email attachments** to local filesystem
@@ -23,6 +24,7 @@ A Model Context Protocol (MCP) server for Gmail integration in Claude Desktop wi
 - Move emails to different labels/folders
 - Delete emails
 - **Batch operations for efficiently processing multiple emails at once**
+- **Account management tools** - Add, remove, and configure multiple Gmail accounts
 - Full integration with Gmail API
 - Simple OAuth2 authentication flow with auto browser launch
 - Support for both Desktop and Web application credentials
@@ -86,6 +88,80 @@ npx -y @smithery/cli install @gongrzhe/server-gmail-autoauth-mcp --client claude
    > - After successful authentication, credentials are stored globally in `~/.gmail-mcp/` and can be used from any directory
    > - Both Desktop app and Web application credentials are supported
    > - For Web application credentials, make sure to add `http://localhost:3000/oauth2callback` to your authorized redirect URIs
+
+### Multi-Account Support
+
+The Gmail MCP Server now supports multiple Gmail accounts with easy switching between them. Each account can be tagged (e.g., "personal", "work") for easy identification.
+
+#### Adding Multiple Accounts
+
+1. **Add your first account** (default):
+   ```bash
+   npx @gongrzhe/server-gmail-autoauth-mcp auth personal personal "Personal Gmail"
+   ```
+
+2. **Add additional accounts**:
+   ```bash
+   # Add work account
+   npx @gongrzhe/server-gmail-autoauth-mcp auth work work "Work Gmail"
+   
+   # Add another personal account
+   npx @gongrzhe/server-gmail-autoauth-mcp auth personal2 personal "Secondary Personal"
+   ```
+
+3. **Quick setup commands**:
+   ```bash
+   # Using npm scripts for common account types
+   npm run auth:personal  # Adds account ID "personal" with tag "personal"
+   npm run auth:work     # Adds account ID "work" with tag "work"
+   ```
+
+#### Using Multiple Accounts
+
+All Gmail operations now accept an optional `account` parameter:
+
+- **Without account parameter**: Uses the default account
+- **With account parameter**: Uses the specified account
+
+```javascript
+// Use default account
+await send_email({
+  to: ["user@example.com"],
+  subject: "Hello",
+  body: "Hello from default account"
+})
+
+// Use specific account
+await send_email({
+  account: "work",
+  to: ["colleague@company.com"], 
+  subject: "Work Email",
+  body: "Hello from work account"
+})
+```
+
+#### Account Management Tools
+
+The server provides tools to manage your accounts:
+
+- `list_accounts` - View all configured accounts and their details
+- `add_account` - Add a new account via OAuth (alternative to command line)
+- `remove_account` - Remove an account
+- `set_default_account` - Change which account is used by default
+- `update_account` - Update account name or tag
+
+#### Account Storage Structure
+
+Accounts are stored in `~/.gmail-mcp/`:
+```
+~/.gmail-mcp/
+├── accounts.json          # Account metadata (tags, names, etc.)
+├── gcp-oauth.keys.json    # Shared OAuth app configuration
+└── accounts/
+    ├── personal.json      # Credentials for personal account
+    ├── work.json          # Credentials for work account
+    └── other.json         # Additional accounts
+```
 
 3. Configure in Claude Desktop:
 
@@ -610,6 +686,58 @@ Here are some practical filter examples:
   "action": {
     "addLabelIds": ["Label_LargeFiles"]
   }
+}
+```
+
+### 19. List Accounts (`list_accounts`)
+
+Lists all configured Gmail accounts with their metadata.
+
+```json
+{}
+```
+
+### 20. Add Account (`add_account`)
+
+Adds a new Gmail account via interactive OAuth2 flow.
+
+```json
+{
+  "accountId": "work2",
+  "tag": "work", 
+  "name": "Secondary Work Account"
+}
+```
+
+### 21. Remove Account (`remove_account`)
+
+Removes a Gmail account and its stored credentials.
+
+```json
+{
+  "accountId": "work2"
+}
+```
+
+### 22. Set Default Account (`set_default_account`)
+
+Changes which account is used when no account parameter is specified.
+
+```json
+{
+  "accountId": "personal"
+}
+```
+
+### 23. Update Account (`update_account`)
+
+Updates account metadata (name and/or tag).
+
+```json
+{
+  "accountId": "personal",
+  "name": "Personal Gmail Updated",
+  "tag": "personal"
 }
 ```
 

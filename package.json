@@ -1,7 +1,7 @@
 {
   "name": "@keleshteri/server-gmail-autoauth-mcp",
-  "version": "1.1.11",
-  "description": "Gmail MCP server with auto authentication support",
+  "version": "2.0.0",
+  "description": "Gmail MCP server with multi-account support and auto authentication",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -11,6 +11,11 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "auth": "node dist/index.js auth",
+    "auth:personal": "node dist/index.js auth personal personal \"Personal Gmail\"",
+    "auth:personal2": "node dist/index.js auth personal2 personal \"Personal Gmail 2\"",
+    "auth:work": "node dist/index.js auth work work \"Work Gmail\"",
+    "auth:work2": "node dist/index.js auth work2 work \"Work Gmail 2\"",
+    "auth:client": "node dist/index.js auth client work \"Client Email\"",
     "prepare": "npm run build",
     "prepublishOnly": "npm run build"
   },
